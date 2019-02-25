@@ -1,0 +1,39 @@
+{
+    "name": "loop-front",
+    "version": "0.0.1",
+    "description": "LoopFront manages the api requests for CRUD, relations and remote methods at front end and make it easy to dispatch redux actions.",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/sirajalam049/loop-front.git"
+    },
+    "keywords": [
+        "loopback",
+        "strongloop",
+        "action",
+        "creator",
+        "action",
+        "dispatcher",
+        "redux",
+        "redux",
+        "thunk",
+        "models"
+    ],
+    "author": "Siraj Alam",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/sirajalam049/loop-front/issues"
+    },
+    "homepage": "https://github.com/sirajalam049/loop-front#readme",
+    "dependencies": {
+        "@types/lodash": "^4.14.121",
+        "axios": "^0.18.0",
+        "lodash": "^4.17.11",
+        "redux": "^4.0.1"
+    }
+}
