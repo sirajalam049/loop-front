@@ -5,6 +5,8 @@ import utils from './utils';
 // These are the methods by which a request is hitted.
 export type TMethod = 'GET' | 'POST' | 'UPDATE' | 'DELETE' | 'PUT' | 'PATCH'
 
+export type TStringObject = { [x: string]: string }
+
 
 // These are the default actions that can be dispatched
 export interface IActions {
@@ -30,15 +32,12 @@ export interface IActions {
     FETCHING_ENTITY_OF_ITEM: string
     ENTITY_OF_ITEM_RECEIVED: string
 
-    // // 
-    // FETCHING_ENTITY_OF_SINGLE_ITEM: string
-    // SINGLE_ITEM_ENTITY_RECEIVED: string
+    POSTING_ENTITY_OF_ITEM: string
+    POST_ENTITY_OF_ITEM_SUCCESS: string
 
-    // POSTING_MODEL_ENTITY: string
-    // MODEL_ENTITY_POST_SUCCESS: string
+    DELETING_ENTITY_OF_ITEM: string
+    ITEM_ENTITY_DELETED: string
 
-    // FETCHING_MODEL_ENTITY: string
-    // MODEL_ENTITY_RECEIVED: string
 }
 
 
@@ -69,10 +68,9 @@ export interface TAction {
     additionalDispatchData?: object
 }
 
+export class LoopFront<TCustomActions extends TStringObject, TEntities extends TStringObject, TActivities extends TStringObject> {
 
-export class LoopFront<TCustomActions> {
-
-    constructor(modelName: string, customActions: (TCustomActions | {}) = {}) {
+    constructor(modelName: string, config: { customActions?: TCustomActions | {}, entities?: TEntities | {}, activities?: TActivities | {} }) {
 
         // name of the model in the LoopBack, e.g. book
         this.ModelName = modelName;
@@ -100,35 +98,33 @@ export class LoopFront<TCustomActions> {
             DELETING_ITEM: `DELETING_${this.ModelCaps}_ITEM`,
             ITEM_DELETED: `${this.ModelCaps}_ITEM_DELETED`,
 
-            FETCHING_ENTITY_OF_ITEM: `FETCHING_ENTITY_OF_ITEM`,
-            ENTITY_OF_ITEM_RECEIVED: `ENTITY_OF_ITEM_RECEIVED`,
+            FETCHING_ENTITY_OF_ITEM: `FETCHING_ENTITY_OF_${this.ModelCaps}`,
+            ENTITY_OF_ITEM_RECEIVED: `ENTITY_OF_${this.ModelCaps}_RECEIVED`,
 
-            // SINGLE_ITEM_POST_SUCCESS: `${this.modelCaps}_SUCCESSFULLY_POSTED`,
+            POSTING_ENTITY_OF_ITEM: `POSTING_ENTITY_OF_${this.ModelCaps}`,
+            POST_ENTITY_OF_ITEM_SUCCESS: `POST_ENTITY_OF_${this.ModelCaps}_SUCCESS`,
 
-            // modelname/id/entityname e.g. destinations/asdkadsadasdasdkwpwr/reviews
-            // FETCHING_ENTITY_OF_SINGLE_ITEM: `FETCHING_${this.modelCaps}_SINGLE_ENTITY`,
-            // SINGLE_ITEM_ENTITY_RECEIVED: `${this.modelCaps}_SINGLE_ENTITY_RECEIVED`,
+            DELETING_ENTITY_OF_ITEM: `DELETING_ENTITY_OF_${this.ModelCaps}`,
+            ITEM_ENTITY_DELETED: `${this.ModelCaps}_ENTITY_DELETED`,
 
-            // POST:modelname/entityname e.g. users/login
-            // POSTING_MODEL_ENTITY: `POSTING_${this.modelCaps}_ENTITY`,
-            // MODEL_ENTITY_POST_SUCCESS: `${this.modelCaps}_ENTITY_POST_SUCCESS`,
-
-            // UPDATING_MODEL_ENTITY_BY_ITEM: `UPDATING_${this.modelCaps}_ENTITY_BY_ITEM`,
-            // MODEL_ENTITY_UPDATE_BY_ITEM_SUCCESS: `${this.modelCaps}_ENTITY_BY_UPDATE_SUCCESS`,
-
-            // modelname/entity e.g. users/me
-            // FETCHING_MODEL_ENTITY: `FETCHING_${this.modelCaps}_ENTITY`,
-            // MODEL_ENTITY_RECEIVED: `${this.modelCaps}_ENTITY_RECIEVED`,
-
-
-            // Override the values of pre-defined actions for a particular object
-            ...customActions
+            // Override the values of pre-defined actions for a particular object or adding new actions
+            ...config.customActions
         }
+
+        this.Entities = config.entities || {};
+
+        this.Activites = {
+            COUNT: 'count',
+            ...(config.activities || {})
+        }
+
     }
 
     readonly ModelName: string;
     readonly ModelCaps: string;
     public Actions: IActions & (TCustomActions | {})
+    public Entities: TEntities | {}
+    public Activites: TActivities | {}
 
     // It will set the baseApiUrl for every API request.
     public init(baseUrl: string) {
@@ -182,9 +178,9 @@ export class LoopFront<TCustomActions> {
     }
 
 
-    requestGetEntityByItem = async (id: number | string, entity: string, params: object = {}) => utils.request({ url: `${this.ModelName}/${id}/${entity}`, params });
-    getEntityByItem = async (id: string | number, entity: string, params: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
-        this.Actions.FETCHING_ENTITY_OF_ITEM = `FETCHING_${_.toUpper(entity)}_OF_SINGLE_${this.ModelCaps}`;
+    requestGetEntityByItem = async (id: number | string, entity: TEntities[keyof TEntities], params: object = {}) => utils.request({ url: `${this.ModelName}/${id}/${entity}`, params });
+    getEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], params: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
+        this.Actions.FETCHING_ENTITY_OF_ITEM = `FETCHING_${_.toUpper(entity as string)}_OF_SINGLE_${this.ModelCaps}`;
         dispatch({ type: this.Actions.FETCHING_ENTITY_OF_ITEM });
         const response = await this.requestGetEntityByItem(id, entity, params).catch(utils.throwError);
         this.Actions.ENTITY_OF_ITEM_RECEIVED = `${_.toUpper(entity)}_OF_SINGLE_${this.ModelCaps}_RECEIVED`;
@@ -192,73 +188,23 @@ export class LoopFront<TCustomActions> {
         return response;
     }
 
-    // requestPutEntityByItem = async (id: string | number, entity: string, data: object = {}) => utils.request({ url: `${this.ModelName}/${id}/${entity}`, data });
-    // putEntityByItem = async(id: string, entity: string, data?: object, additionalDispatchData?: object) => async (dispatch:Dispatch<any>) => {
-    //     this
-    // }
+    requestPostEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], data: object = {}) => utils.request({ url: `${this.ModelName}/${id}/${entity}`, data, method: 'POST' });
+    postEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], data: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
+        this.Actions.POSTING_ENTITY_OF_ITEM = `POSTING_${_.toUpper(entity)}_OF_${this.ModelCaps}`;
+        dispatch({ type: this.Actions.POSTING_ENTITY_OF_ITEM });
+        const response = await this.requestPostEntityByItem(id, entity, data).catch(utils.throwError);
+        this.Actions.POST_ENTITY_OF_ITEM_SUCCESS = `POST_${_.toUpper(entity)}_OF_${this.ModelCaps}_SUCCESS`
+        dispatch({ type: this.Actions.POST_ENTITY_OF_ITEM_SUCCESS, data: response.data, entity, additionalDispatchData });
+        return response;
+    }
 
-    //                     this.actions.MODEL_ENTITY_UPDATE_BY_ITEM_SUCCESS = `${this.modelCaps}_${_.toUpper(entity)}_UPDATE_BY_ITEM_SUCCESS`
-    // dispatch({ type: this.actions.MODEL_ENTITY_UPDATE_BY_ITEM_SUCCESS, data: res.data, entity, additionalDispatchData });
-    // resolve(res);
-    //                         },
-    // err => {
-    //     console.log('Error', err);
-    //     reject(err)
-    // }
-    //                     )
-    //                 })
-    //             )
-    //         }
-
-    // getModelEntity(entity: string, params?: object, additionalDispatchData?: object) {
-    //     return (dispatch: Function) => {
-    //         this.actions.FETCHING_MODEL_ENTITY = `FETCHING_${this.modelCaps}_${_.toUpper(entity)}`;
-    //         this.actions.MODEL_ENTITY_RECEIVED = `${this.modelCaps}_${_.toUpper(entity)}_RECEIVED`;
-    //         dispatch({ type: this.actions.FETCHING_MODEL_ENTITY });
-    //         return (
-    //             new Promise((resolve, reject) => {
-    //                 utilities.request({
-    //                     url: `${this.modelName}/${entity}`,
-    //                     params
-    //                 }).then(
-    //                     res => {
-    //                         dispatch({ type: this.actions.MODEL_ENTITY_RECEIVED, data: res.data, entity, additionalDispatchData })
-    //                         resolve(res)
-    //                     },
-    //                     err => {
-    //                         console.log('Error', err)
-    //                         reject(err)
-    //                     })
-    //             })
-    //         )
-    //     }
-    // }
-
-    // postModelEntity(entity: string, data?: object, params?: object, additionalDispatchData?: object) {
-    //     return (dispatch: Function) => {
-    //         this.actions.POSTING_MODEL_ENTITY = `REQUESTING_${this.modelCaps}_${_.toUpper(entity)}`;
-    //         this.actions.MODEL_ENTITY_POST_SUCCESS = `${this.modelCaps}_${_.toUpper(entity)}_SUCCESS`;
-    //         dispatch({ type: this.actions.POSTING_MODEL_ENTITY });
-    //         return (
-    //             new Promise((resolve, reject) => {
-    //                 utilities.request({
-    //                     method: 'POST',
-    //                     url: `${this.modelName}/${entity}`,
-    //                     data,
-    //                     params
-    //                 }).then(
-    //                     res => {
-    //                         dispatch({ type: this.actions.MODEL_ENTITY_POST_SUCCESS, data: res.data, entity, additionalDispatchData })
-    //                         resolve(res)
-    //                     },
-    //                     err => {
-    //                         console.log('Error', err)
-    //                         reject(err)
-    //                     }
-    //                 )
-    //             })
-    //         )
-    //     }
-    // }
-
+    requestDeleteEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities]) => utils.request({ url: `${this.ModelCaps}/${id}/${entity}`, method: 'DELETE' });
+    deleteEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
+        this.Actions.DELETING_ENTITY_OF_ITEM = `DELETING_${_.toUpper(entity)}_OF_${this.ModelCaps}`;
+        dispatch({ type: this.Actions.DELETING_ENTITY_OF_ITEM });
+        const response = await this.requestDeleteEntityByItem(id, entity).catch(utils.throwError);
+        this.Actions.ITEM_ENTITY_DELETED = `${this.ModelCaps}_${_.toUpper(entity)}_DELETED`
+        dispatch({ type: this.Actions.ITEM_ENTITY_DELETED, data: response.data, entity, additionalDispatchData });
+        return response;
+    }
 }
