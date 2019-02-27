@@ -80,7 +80,7 @@ export interface TAction {
     additionalDispatchData?: object
 }
 
-export class LoopFront<TCustomActions extends TStringObject, TEntities extends TStringObject, TActivities extends TStringObject> {
+class LoopFront<TCustomActions extends TStringObject, TEntities extends TStringObject, TActivities extends TStringObject> {
 
     constructor(modelName: string, config: { customActions?: TCustomActions | {}, entities?: TEntities | {}, activities?: TActivities | {} }) {
 
@@ -278,3 +278,5 @@ export class LoopFront<TCustomActions extends TStringObject, TEntities extends T
     }
 
 }
+
+export default LoopFront;
