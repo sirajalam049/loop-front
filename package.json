@@ -1,8 +1,9 @@
 {
     "name": "loop-front",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "LoopFront manages the api requests for CRUD, relations and remote methods at front end and make it easy to dispatch redux actions.",
     "main": "./dist/index.js",
+    "_location": "/@loopfront",
     "types": "./dist/index.d.ts",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -28,6 +29,9 @@
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/sirajalam049/loop-front/issues"
+    },
+    "publishConfig": {
+        "access": "public"
     },
     "homepage": "https://github.com/sirajalam049/loop-front#readme",
     "dependencies": {
