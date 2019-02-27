@@ -90,7 +90,7 @@ export interface TAction {
 
 class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TStringObject = {}, TActivities extends TStringObject = {}> {
 
-    constructor(modelName: string, config: { customActions: TCustomActions, entities: TEntities, activities: TActivities }) {
+    constructor(modelName: string, customActions: TCustomActions = {} as TCustomActions, entities: TEntities = {} as TEntities, activities: TActivities = {} as TActivities) {
 
         // name of the model in the LoopBack, e.g. book
         this.ModelName = modelName;
@@ -141,12 +141,12 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
 
 
             // Override the values of pre-defined actions for a particular object or adding new actions
-            ...(config.customActions || {})
+            ...(customActions || {})
         }
 
-        this.Entities = { ...(config.entities) };
+        this.Entities = { ...(entities) };
 
-        this.Activites = { ...DefaultActivites, ...(config.activities || {}) }
+        this.Activites = { ...DefaultActivites, ...(activities || {}) }
 
     }
 
