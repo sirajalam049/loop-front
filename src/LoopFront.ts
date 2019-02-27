@@ -52,6 +52,14 @@ export interface IActions {
 
 }
 
+export const DefaultActivites = {
+    COUNT: 'count',
+    EXISTS: 'exists',
+    REPLACE: 'replace',
+    FIND_ONE: 'findOne',
+    REPLACE_OR_CREATE: 'replaceOrCreate',
+}
+
 
 // This is the type of an acton, that what different entities it wil have.
 export interface TAction {
@@ -80,9 +88,9 @@ export interface TAction {
     additionalDispatchData?: object
 }
 
-class LoopFront<TCustomActions extends TStringObject = TStringObject, TEntities extends TStringObject = TStringObject, TActivities extends TStringObject = TStringObject> {
+class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TStringObject = {}, TActivities extends TStringObject = {}> {
 
-    constructor(modelName: string, config: { customActions?: TCustomActions | {}, entities?: TEntities | {}, activities?: TActivities | {} }) {
+    constructor(modelName: string, config: { customActions: TCustomActions, entities: TEntities, activities: TActivities }) {
 
         // name of the model in the LoopBack, e.g. book
         this.ModelName = modelName;
@@ -133,27 +141,20 @@ class LoopFront<TCustomActions extends TStringObject = TStringObject, TEntities 
 
 
             // Override the values of pre-defined actions for a particular object or adding new actions
-            ...config.customActions
+            ...(config.customActions || {})
         }
 
-        this.Entities = config.entities || {};
+        this.Entities = { ...(config.entities) };
 
-        this.Activites = {
-            COUNT: 'count',
-            EXISTS: 'exists',
-            REPLACE: 'replace',
-            FIND_ONE: 'findOne',
-            REPLACE_OR_CREATE: 'replaceOrCreate',
-            ...(config.activities || {})
-        }
+        this.Activites = { ...DefaultActivites, ...(config.activities || {}) }
 
     }
 
     readonly ModelName: string;
     readonly ModelCaps: string;
-    public Actions: IActions & (TCustomActions | {})
-    public Entities: TEntities | {}
-    public Activites: TActivities | {}
+    public Actions: IActions & (TCustomActions)
+    public Entities: TEntities
+    public Activites: typeof DefaultActivites & TActivities
 
     // It will set the baseApiUrl for every API request.
     public init(baseUrl: string) {
