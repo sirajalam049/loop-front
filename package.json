@@ -1,9 +1,9 @@
 {
     "name": "loop-front",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "description": "LoopFront manages the api requests for CRUD, relations and remote methods at front end and make it easy to dispatch redux actions.",
     "main": "./dist/index.js",
-    "_location": "/@loopfront",
+    "_location": "/loop-front",
     "types": "./dist/index.d.ts",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
