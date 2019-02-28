@@ -85,7 +85,7 @@ export interface TAction {
     activity?: string
 
     // It is the additional dispatch data which can be needed in the reducer from the custom dispatcher.
-    additionalDispatchData?: object
+    additionalDispatchData: any
 }
 
 class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TStringObject = {}, TActivities extends TStringObject = {}> {
