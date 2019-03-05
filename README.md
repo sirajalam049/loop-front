@@ -5,10 +5,10 @@ Hello I'm LoopFront, and I am written to work with [Redux](https://redux.js.org)
 
 # Let's Chat
 
-## What?? Why?
+### What?? Why?
 Coz it'll be fun :)
 
-## Who exactly you are and what Exactly it is that you do?
+### Who exactly you are and what Exactly it is that you do?
 I'm an [npm](https://www.npmjs.com/package/loop-front) package (written in [TS](https://www.typescriptlang.org) <3) that contains all the basic generic API request methods that loopback provide, I also dispatch [redux actions](https://redux.js.org/basics/actions#actions) on the basis of API request you made.
 
 ##
