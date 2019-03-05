@@ -16,7 +16,8 @@ Ok. Say you have to make an API request to get the list of cities. What normal r
 
 1. component.js
 
-`import getCitiesList from actions.js
+```javascript
+import getCitiesList from actions.js
 class ComponentName extends React.Component {
     componentDidMount(){
         this.props.getCitiesList();
@@ -38,4 +39,5 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     getCitiesList: () => dispatch(getCitiesList())
-})`
+})
+```
