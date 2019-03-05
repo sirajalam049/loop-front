@@ -1,2 +1,2 @@
-# Loop-front
-It manages the api requests for CRUD, relations and remote methods at front end and make it easy to dispatch redux actions.
+# Loop-Front
+Hello I'm LoopFront, and I am written to work with [Redux](https://redux.js.org) and [LoopBack](http://loopback.io/) like REST APIs. I manage action dispatcher for you and also manages api requests.
