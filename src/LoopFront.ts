@@ -161,7 +161,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         utils.setBaseAPI_URL(baseUrl);
     }
 
-    public static setAuthHeader = (access_token?: string) => {
+    public static setAuthHeader(access_token?: string) {
         utils.setAuthHeader(access_token);
     }
 
