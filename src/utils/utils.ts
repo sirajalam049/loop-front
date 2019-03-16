@@ -10,6 +10,8 @@ const utils = {
 
     setHeader: (type = 'Content-Type', value = 'application/json') => axios.defaults.headers.post[type] = value,
 
+    setAuthHeader: (access_token: string) => axios.defaults.headers.common['Authorization'] = access_token,
+
     throwError: (error: any) => { console.log('Error', error); throw error }
 
 }
