@@ -161,6 +161,10 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         utils.setBaseAPI_URL(baseUrl);
     }
 
+    public static setAuthHeader = (access_token?: string) => {
+        utils.setAuthHeader(access_token);
+    }
+
 
     // GET All items of the model
     requestGetItemsList = async (params: object = {}) => utils.request({ url: this.ModelName, params });
