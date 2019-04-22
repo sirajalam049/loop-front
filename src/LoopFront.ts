@@ -231,7 +231,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     requestGetEntityByItem = async (id: number | string, entity: TEntities[keyof TEntities], params: object = {}) => utils.request({ url: `${this.ModelName}/${id}/${entity}`, params });
     getEntityByItem = (id: string | number, entity: TEntities[keyof TEntities], params: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.FETCHING_ENTITY_OF_ITEM = `FETCHING_${_.toUpper(entity as string)}_OF_SINGLE_${this.ModelCaps}`;
-        dispatch({ type: this.Actions.FETCHING_ENTITY_OF_ITEM });
+        dispatch({ type: this.Actions.FETCHING_ENTITY_OF_ITEM, entity });
         const response = await this.requestGetEntityByItem(id, entity, params).catch(utils.throwError);
         this.Actions.ENTITY_OF_ITEM_RECEIVED = `${_.toUpper(entity)}_OF_SINGLE_${this.ModelCaps}_RECEIVED`;
         dispatch({ type: this.Actions.ENTITY_OF_ITEM_RECEIVED, data: response.data, entity, additionalDispatchData });
@@ -241,7 +241,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     requestPostEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], data: object = {}) => utils.request({ url: `${this.ModelName}/${id}/${entity}`, data, method: 'POST' });
     postEntityByItem = (id: string | number, entity: TEntities[keyof TEntities], data: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.POSTING_ENTITY_OF_ITEM = `POSTING_${_.toUpper(entity)}_OF_${this.ModelCaps}`;
-        dispatch({ type: this.Actions.POSTING_ENTITY_OF_ITEM });
+        dispatch({ type: this.Actions.POSTING_ENTITY_OF_ITEM, entity });
         const response = await this.requestPostEntityByItem(id, entity, data).catch(utils.throwError);
         this.Actions.POST_ENTITY_OF_ITEM_SUCCESS = `POST_${_.toUpper(entity)}_OF_${this.ModelCaps}_SUCCESS`
         dispatch({ type: this.Actions.POST_ENTITY_OF_ITEM_SUCCESS, data: response.data, entity, additionalDispatchData });
@@ -251,7 +251,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     requestDeleteEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities]) => utils.request({ url: `${this.ModelName}/${id}/${entity}`, method: 'DELETE' });
     deleteEntityByItem = (id: string | number, entity: TEntities[keyof TEntities], additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.DELETING_ENTITY_OF_ITEM = `DELETING_${_.toUpper(entity)}_OF_${this.ModelCaps}`;
-        dispatch({ type: this.Actions.DELETING_ENTITY_OF_ITEM });
+        dispatch({ type: this.Actions.DELETING_ENTITY_OF_ITEM, entity });
         const response = await this.requestDeleteEntityByItem(id, entity).catch(utils.throwError);
         this.Actions.ITEM_ENTITY_DELETED = `${this.ModelCaps}_${_.toUpper(entity)}_DELETED`
         dispatch({ type: this.Actions.ITEM_ENTITY_DELETED, data: response.data, entity, additionalDispatchData });
@@ -261,7 +261,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     requestGetActivity = async (activity: TActivities[keyof TActivities], params: object = {}) => utils.request({ url: `${this.ModelName}/${activity}`, params });
     getActivity = (activity: TActivities[keyof TActivities], params: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.FETCHING_ACTIVITY = `FETCHING_${this.ModelCaps}_${_.toUpper(activity)}`;
-        dispatch({ type: this.Actions.FETCHING_ACTIVITY });
+        dispatch({ type: this.Actions.FETCHING_ACTIVITY, activity });
         const response = await this.requestGetActivity(activity, params).catch(utils.throwError);
         this.Actions.ACTIVITY_RECEIVED = `${this.ModelCaps}_${_.toUpper(activity)}_RECEIVED`;
         dispatch({ type: this.Actions.ACTIVITY_RECEIVED, data: response.data, activity, additionalDispatchData });
@@ -271,7 +271,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     requestPostActivity = async (activity: TActivities[keyof TActivities], data: object = {}) => utils.request({ url: `${this.ModelName}/${activity}`, data, method: 'POST' });
     postActivity = (activity: TActivities[keyof TActivities], data: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.POSTING_ACTIVITY = `POSTING_${this.ModelCaps}_${_.toUpper(activity)}`;
-        dispatch({ type: this.Actions.POSTING_ACTIVITY });
+        dispatch({ type: this.Actions.POSTING_ACTIVITY, activity });
         const response = await this.requestPostActivity(activity, data).catch(utils.throwError);
         this.Actions.ACTIVITY_POST_SUCCESS = `${this.ModelCaps}_${_.toUpper(activity)}_POST_SUCCESS`;
         dispatch({ type: this.Actions.ACTIVITY_POST_SUCCESS, data: response.data, activity, additionalDispatchData });
@@ -281,7 +281,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     requestGetItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], params: object = {}) => utils.request({ url: `${this.ModelName}/${id}/${activity}`, params });
     getItemActivity = (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.FETCHING_ITEM_ACTIVITY = `FETCHING_${this.ModelCaps}_ITEM_${_.toUpper(activity)}`;
-        dispatch({ type: this.Actions.FETCHING_ITEM_ACTIVITY });
+        dispatch({ type: this.Actions.FETCHING_ITEM_ACTIVITY, activity });
         const response = await this.requestGetItemActivity(id, activity, params).catch(utils.throwError);
         this.Actions.ITEM_ACTIVITY_RECEIVED = `${this.ModelCaps}_ITEM_${_.toUpper(activity)}_RECEIVED`;
         dispatch({ type: this.Actions.ITEM_ACTIVITY_RECEIVED, data: response.data, activity, additionalDispatchData });
@@ -291,7 +291,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     requestPostItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], data: object = {}) => utils.request({ url: `${this.ModelName}/${id}/${activity}`, method: 'POST', data });
     postItemActivity = (id: string | number, activity: TActivities[keyof TActivities], data: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.POSTING_ITEM_ACTIVITY = `$POSTING_${this.ModelCaps}_ITEM_${_.toUpper(activity)}`;
-        dispatch({ type: this.Actions.POSTING_ITEM_ACTIVITY });
+        dispatch({ type: this.Actions.POSTING_ITEM_ACTIVITY, activity });
         const response = await this.requestPostItemActivity(id, activity, data).catch(utils.throwError);
         this.Actions.ITEM_ACTIVITY_POST_SUCCESS = `${this.ModelCaps}_ITEM_ACTIVITY_POST_SUCCESS`;
         dispatch({ type: this.Actions.ITEM_ACTIVITY_POST_SUCCESS, data: response.data, activity, additionalDispatchData });
