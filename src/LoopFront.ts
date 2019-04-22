@@ -19,6 +19,10 @@ export interface IActions {
     FETCHING_SINGLE_ITEM: string
     SINGLE_ITEM_RECEIVED: string
 
+    // Creating a new instance
+    POSTING_ITEM: string
+    POST_ITEM_SUCCESS: string
+
     // Request to create new instance or just replace the existing item
     PUTTING_ITEM: string
     PUT_ITEM_SUCCESS: string
@@ -112,6 +116,9 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
             PUTTING_ITEM: `PUTTING_SINGLE_${this.ModelCaps}`,
             PUT_ITEM_SUCCESS: `${this.ModelCaps}_PUTTING_SUCCESSFUL`,
 
+            POSTING_ITEM: `POSTING_SINGLE_${this.ModelCaps}`,
+            POST_ITEM_SUCCESS: `${this.ModelCaps}_POSTING_SUCCESSFUL`,
+
             PATCHING_ITEM: `PATCHING_${this.ModelCaps}_ITEM`,
             ITEM_PATCH_SUCCESS: `${this.ModelCaps}_ITEM_PATCH_SUCCESS`,
 
@@ -184,7 +191,16 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         return response;
     }
 
-    // Submit new or replace existing instance of the model
+    // create a new instance
+    requestPostItem = async (data: object = {}) => utils.request({ url: this.ModelName, method: 'POST', data });
+    postItem = (data: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
+        dispatch({ type: this.Actions.POSTING_ITEM });
+        const response = await this.requestPostItem(data).catch(utils.throwError);
+        dispatch({ type: this.Actions.POST_ITEM_SUCCESS, data: response.data, additionalDispatchData });
+        return response;
+    }
+
+    // replace existing instance of the model or inserting a new one
     requestPutItem = async (data: object = {}) => utils.request({ url: this.ModelName, method: 'PUT', data });
     putItem = (data: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         dispatch({ type: this.Actions.PUTTING_ITEM });
