@@ -64,6 +64,12 @@ export const DefaultActivites = {
     REPLACE_OR_CREATE: 'replaceOrCreate',
 }
 
+export interface TRequestConfig {
+    url: string,
+    params?: object,
+    method?: TMethod,
+    data?: object
+}
 
 // This is the type of an acton, that what different entities it wil have.
 export interface TAction {
@@ -171,6 +177,8 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     public static setAuthHeader(access_token?: string) {
         utils.setAuthHeader(access_token);
     }
+
+    public static request = (config: TRequestConfig) => utils.request(config);
 
 
     // GET All items of the model
