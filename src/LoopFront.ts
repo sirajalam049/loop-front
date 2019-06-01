@@ -200,28 +200,28 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     }
 
     // create a new instance
-    requestPostItem = async (data: object = {}) => utils.request({ url: this.ModelName, method: 'POST', data });
-    postItem = (data: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
+    requestPostItem = async (data: object = {}, params: object = {}, ) => utils.request({ url: this.ModelName, method: 'POST', data, params });
+    postItem = (data: object = {}, params: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         dispatch({ type: this.Actions.POSTING_ITEM });
-        const response = await this.requestPostItem(data).catch(utils.throwError);
+        const response = await this.requestPostItem(data, params).catch(utils.throwError);
         dispatch({ type: this.Actions.POST_ITEM_SUCCESS, data: response.data, additionalDispatchData });
         return response;
     }
 
     // replace existing instance of the model or inserting a new one
-    requestPutItem = async (data: object = {}) => utils.request({ url: this.ModelName, method: 'PUT', data });
-    putItem = (data: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
+    requestPutItem = async (data: object = {}, params: object = {}) => utils.request({ url: this.ModelName, method: 'PUT', data, params });
+    putItem = (data: object = {}, params: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         dispatch({ type: this.Actions.PUTTING_ITEM });
-        const response = await this.requestPutItem(data).catch(utils.throwError);
+        const response = await this.requestPutItem(data, params).catch(utils.throwError);
         dispatch({ type: this.Actions.PUT_ITEM_SUCCESS, data: response.data, additionalDispatchData });
         return response;
     }
 
     // Update the existing instance of the model
-    requestPatchItem = async (data: object & { id: string | number }) => utils.request({ url: this.ModelName, method: 'PATCH', data });
-    patchItem = (data: object & { id: number | string }, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
+    requestPatchItem = (data: object & { id: string | number }, params: object = {}) => utils.request({ url: this.ModelName, method: 'PATCH', data, params });
+    patchItem = (data: object & { id: number | string }, params: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         dispatch({ type: this.Actions.PATCHING_ITEM });
-        const response = await this.requestPatchItem(data).catch(utils.throwError);
+        const response = await this.requestPatchItem(data, params).catch(utils.throwError);
         dispatch({ type: this.Actions.ITEM_PATCH_SUCCESS, data: response.data, additionalDispatchData });
         return response;
     }
@@ -246,11 +246,11 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         return response;
     }
 
-    requestPostEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], data: object = {}) => utils.request({ url: `${this.ModelName}/${id}/${entity}`, data, method: 'POST' });
-    postEntityByItem = (id: string | number, entity: TEntities[keyof TEntities], data: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
+    requestPostEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], data: object = {}, params: object = {}, ) => utils.request({ url: `${this.ModelName}/${id}/${entity}`, data, method: 'POST', params });
+    postEntityByItem = (id: string | number, entity: TEntities[keyof TEntities], data: object = {}, params: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.POSTING_ENTITY_OF_ITEM = `POSTING_${_.toUpper(entity)}_OF_${this.ModelCaps}`;
         dispatch({ type: this.Actions.POSTING_ENTITY_OF_ITEM, entity });
-        const response = await this.requestPostEntityByItem(id, entity, data).catch(utils.throwError);
+        const response = await this.requestPostEntityByItem(id, entity, data, params).catch(utils.throwError);
         this.Actions.POST_ENTITY_OF_ITEM_SUCCESS = `POST_${_.toUpper(entity)}_OF_${this.ModelCaps}_SUCCESS`
         dispatch({ type: this.Actions.POST_ENTITY_OF_ITEM_SUCCESS, data: response.data, entity, additionalDispatchData });
         return response;
@@ -276,11 +276,11 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         return response;
     }
 
-    requestPostActivity = async (activity: TActivities[keyof TActivities], data: object = {}) => utils.request({ url: `${this.ModelName}/${activity}`, data, method: 'POST' });
-    postActivity = (activity: TActivities[keyof TActivities], data: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
+    requestPostActivity = async (activity: TActivities[keyof TActivities], data: object = {}, params: object = {}) => utils.request({ url: `${this.ModelName}/${activity}`, data, method: 'POST', params });
+    postActivity = (activity: TActivities[keyof TActivities], data: object = {}, params: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.POSTING_ACTIVITY = `POSTING_${this.ModelCaps}_${_.toUpper(activity)}`;
         dispatch({ type: this.Actions.POSTING_ACTIVITY, activity });
-        const response = await this.requestPostActivity(activity, data).catch(utils.throwError);
+        const response = await this.requestPostActivity(activity, data, params).catch(utils.throwError);
         this.Actions.ACTIVITY_POST_SUCCESS = `${this.ModelCaps}_${_.toUpper(activity)}_POST_SUCCESS`;
         dispatch({ type: this.Actions.ACTIVITY_POST_SUCCESS, data: response.data, activity, additionalDispatchData });
         return response;
@@ -296,11 +296,11 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         return response;
     }
 
-    requestPostItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], data: object = {}) => utils.request({ url: `${this.ModelName}/${id}/${activity}`, method: 'POST', data });
-    postItemActivity = (id: string | number, activity: TActivities[keyof TActivities], data: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
+    requestPostItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], data: object = {}, params: object = {}) => utils.request({ url: `${this.ModelName}/${id}/${activity}`, method: 'POST', data, params });
+    postItemActivity = (id: string | number, activity: TActivities[keyof TActivities], data: object = {}, params: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.POSTING_ITEM_ACTIVITY = `$POSTING_${this.ModelCaps}_ITEM_${_.toUpper(activity)}`;
         dispatch({ type: this.Actions.POSTING_ITEM_ACTIVITY, activity });
-        const response = await this.requestPostItemActivity(id, activity, data).catch(utils.throwError);
+        const response = await this.requestPostItemActivity(id, activity, data, params).catch(utils.throwError);
         this.Actions.ITEM_ACTIVITY_POST_SUCCESS = `${this.ModelCaps}_ITEM_ACTIVITY_POST_SUCCESS`;
         dispatch({ type: this.Actions.ITEM_ACTIVITY_POST_SUCCESS, data: response.data, activity, additionalDispatchData });
         return response;
