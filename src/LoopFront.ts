@@ -156,12 +156,12 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
 
 
             // Override the values of pre-defined actions for a particular object or adding new actions
-            ...(customActions || {})
+            ...(customActions || {} as TCustomActions)
         }
 
         this.Entities = { ...(entities) };
 
-        this.Activites = { ...DefaultActivites, ...(activities || {}) }
+        this.Activites = { ...DefaultActivites, ...(activities || {} as TActivities) }
 
     }
 
@@ -172,9 +172,11 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     public Activites: typeof DefaultActivites & TActivities
 
     // It will set the baseApiUrl for every API request.
-    public static init(baseUrl: string, config: { log: boolean }) {
+    public static init(baseUrl: string, config?: { log: boolean }) {
         utils.setBaseAPI_URL(baseUrl);
-        this.Logger = config.log;
+        if (config) {
+            this.Logger = config.log || false;
+        }
     }
 
     public static setAuthHeader(access_token?: string) {
