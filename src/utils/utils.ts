@@ -5,11 +5,13 @@ import axios from 'axios'
 const utils = {
 
     request: <T = {}>(config: TRequestConfig): ReturnType<typeof axios.request> => {
+        console.log('base Url', axios.defaults.baseURL);
         if (!axios.defaults.baseURL) {
             throw new Error('Error: Loopfront Base Url is not provided');
         }
         if (LoopFront.Logger) {
-            console.log("%cRequest => ", "font-size: 12px; color: rgb(51, 102, 255); font-weight: bold", config);
+            console.log("%cRequest => ", "font-size: 12px; color: rgb(0, 204, 102); font-weight: bold", `${axios.defaults.baseURL}/${config.url}`);
+            console.log("%Config => ", "font-size: 12px; color: rgb(51, 102, 255); font-weight: bold", config);
         }
         return axios.request<T>(config)
     },
