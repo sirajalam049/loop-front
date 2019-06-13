@@ -172,11 +172,9 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     public Activites: typeof DefaultActivites & TActivities
 
     // It will set the baseApiUrl for every API request.
-    public static init(baseUrl: string, config?: { log: boolean }) {
+    public static init(baseUrl: string, config: { log: boolean } = { log: false }) {
         utils.setBaseAPI_URL(baseUrl);
-        if (config) {
-            this.Logger = config.log || false;
-        }
+        this.Logger = config.log || false;
     }
 
     public static setAuthHeader(access_token?: string) {
