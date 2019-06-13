@@ -5,7 +5,6 @@ import axios from 'axios'
 const utils = {
 
     request: <T = {}>(config: TRequestConfig): ReturnType<typeof axios.request> => {
-        console.log('base Url', axios.defaults.baseURL);
         if (!axios.defaults.baseURL) {
             throw new Error('Error: Loopfront Base Url is not provided');
         }
