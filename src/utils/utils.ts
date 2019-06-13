@@ -11,7 +11,7 @@ const utils = {
         }
         if (LoopFront.Logger) {
             console.log("%cRequest => ", "font-size: 12px; color: rgb(0, 204, 102); font-weight: bold", `${axios.defaults.baseURL}/${config.url}`);
-            console.log("%Config => ", "font-size: 12px; color: rgb(51, 102, 255); font-weight: bold", config);
+            console.log("%cConfig => ", "font-size: 12px; color: rgb(51, 102, 255); font-weight: bold", config);
         }
         return axios.request<T>(config)
     },
