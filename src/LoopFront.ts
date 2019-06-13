@@ -1,5 +1,6 @@
 import { Dispatch } from 'redux';
 import utils from './utils';
+import { AxiosRequestConfig } from 'axios';
 
 // These are the methods by which a request is hitted.
 export type TMethod = 'GET' | 'POST' | 'UPDATE' | 'DELETE' | 'PUT' | 'PATCH'
@@ -63,7 +64,7 @@ export const DefaultActivites = {
     REPLACE_OR_CREATE: 'replaceOrCreate',
 }
 
-export interface TRequestConfig {
+export interface TRequestConfig extends AxiosRequestConfig {
     url: string,
     params?: object,
     method?: TMethod,
@@ -98,6 +99,8 @@ export interface TAction {
 }
 
 class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TStringObject = {}, TActivities extends TStringObject = {}> {
+
+    static Logger: boolean;
 
     constructor(modelName: string, customActions: TCustomActions = {} as TCustomActions, entities: TEntities = {} as TEntities, activities: TActivities = {} as TActivities) {
 
@@ -169,8 +172,9 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     public Activites: typeof DefaultActivites & TActivities
 
     // It will set the baseApiUrl for every API request.
-    public static init(baseUrl: string) {
+    public static init(baseUrl: string, config: { log: boolean }) {
         utils.setBaseAPI_URL(baseUrl);
+        this.Logger = config.log;
     }
 
     public static setAuthHeader(access_token?: string) {
