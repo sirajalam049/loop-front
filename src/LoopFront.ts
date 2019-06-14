@@ -1,5 +1,6 @@
 import { Dispatch } from 'redux';
 import utils from './utils';
+import { Method } from 'axios';
 
 // These are the methods by which a request is hitted.
 export type TMethod = 'GET' | 'POST' | 'UPDATE' | 'DELETE' | 'PUT' | 'PATCH'
@@ -66,7 +67,7 @@ export const DefaultActivites = {
 export interface TRequestConfig {
     url: string,
     params?: object,
-    method?: TMethod,
+    method?: Method,
     data?: object
 }
 
