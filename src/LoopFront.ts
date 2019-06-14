@@ -1,6 +1,5 @@
 import { Dispatch } from 'redux';
 import utils from './utils';
-import { AxiosRequestConfig } from 'axios';
 
 // These are the methods by which a request is hitted.
 export type TMethod = 'GET' | 'POST' | 'UPDATE' | 'DELETE' | 'PUT' | 'PATCH'
@@ -64,7 +63,7 @@ export const DefaultActivites = {
     REPLACE_OR_CREATE: 'replaceOrCreate',
 }
 
-export interface TRequestConfig extends AxiosRequestConfig {
+export interface TRequestConfig {
     url: string,
     params?: object,
     method?: TMethod,
