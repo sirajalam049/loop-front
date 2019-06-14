@@ -2,9 +2,6 @@ import { Dispatch } from 'redux';
 import utils from './utils';
 import { Method } from 'axios';
 
-// These are the methods by which a request is hitted.
-export type TMethod = 'GET' | 'POST' | 'UPDATE' | 'DELETE' | 'PUT' | 'PATCH'
-
 export type TStringObject = { [x: string]: string }
 
 

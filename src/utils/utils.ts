@@ -1,10 +1,10 @@
 import LoopFront, { TRequestConfig } from "../LoopFront";
-import axios from 'axios'
+import axios, { AxiosPromise } from 'axios'
 
 // Just a wrapper on axios, in case some other library is used in place of axios
 const utils = {
 
-    request: <T = {}>(config: TRequestConfig): ReturnType<typeof axios.request> => {
+    request: <T = {}>(config: TRequestConfig): AxiosPromise => {
         if (!axios.defaults.baseURL) {
             throw new Error('Error: Loopfront Base Url is not provided');
         }
