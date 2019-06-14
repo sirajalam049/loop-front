@@ -218,10 +218,10 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     }
 
     // Update the existing instance of the model
-    requestPatchItem = (data: object & { id: string | number }, params: object = {}) => utils.request({ url: this.ModelName, method: 'PATCH', data, params });
-    patchItem = (data: object & { id: number | string }, params: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
+    requestPatchItem = (id: string | number, data: object, params: object = {}) => utils.request({ url: `${this.ModelName}/${id}`, method: 'PATCH', data, params });
+    patchItem = (id: string | number, data: object, params: object = {}, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         dispatch({ type: this.Actions.PATCHING_ITEM });
-        const response = await this.requestPatchItem(data, params).catch(utils.throwError);
+        const response = await this.requestPatchItem(id, data, params).catch(utils.throwError);
         dispatch({ type: this.Actions.ITEM_PATCH_SUCCESS, data: response.data, additionalDispatchData });
         return response;
     }
