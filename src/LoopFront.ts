@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import utils from './utils';
-import { Method, CancelToken, AxiosRequestConfig } from 'axios';
+import { Method, CancelToken, AxiosRequestConfig, Cancel } from 'axios';
 
 export type TStringObject = { [x: string]: string }
 
@@ -50,6 +50,9 @@ export interface IActions {
 
     POSTING_ITEM_ACTIVITY: string
     ITEM_ACTIVITY_POST_SUCCESS: string
+
+    DELETING_ITEM_ACTIVITY: string
+    ITEM_ACTIVITY_DELETE_SUCCESS: string
 
 }
 
@@ -150,6 +153,9 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
 
             POSTING_ITEM_ACTIVITY: `POSTING_${this.ModelCaps}_ITEM_ACTIVITY`,
             ITEM_ACTIVITY_POST_SUCCESS: `${this.ModelCaps}_ITEM_ACTIVITY_POST_SUCCESS`,
+
+            DELETING_ITEM_ACTIVITY: `${this.ModelCaps}_DELETING_ITEM_ACTIVITY`,
+            ITEM_ACTIVITY_DELETE_SUCCESS: `${this.ModelCaps}_ACTIVITY_DELETE_SUCCESS`,
 
 
             // Override the values of pre-defined actions for a particular object or adding new actions
@@ -285,6 +291,17 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         dispatch({ type: this.Actions.ACTIVITY_POST_SUCCESS, data: response.data, activity, additionalDispatchData });
         return response;
     }
+
+    requestDeleteItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken) => utils.request({ url: `${this.ModelName}/id/${activity}`, params, method: 'DELETE', cancelToken });
+    deleteItemActivity = (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
+        this.Actions.DELETING_ITEM_ACTIVITY = `DELETING_${this.ModelCaps}_${(activity || '').toUpperCase()}`;
+        dispatch({ type: this.Actions.DELETING_ITEM_ACTIVITY, activity });
+        const response = await this.requestDeleteItemActivity(id, activity, params, cancelToken).catch(utils.throwError);
+        this.Actions.ITEM_ACTIVITY_DELETE_SUCCESS = `${this.ModelCaps}_${(activity || '').toUpperCase()}_DELETE_SUCCESS`;
+        dispatch({ type: this.Actions.ITEM_ACTIVITY_DELETE_SUCCESS, data: response.data, activity, additionalDispatchData });
+        return response;
+    }
+
 
     requestGetItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken, ) => utils.request({ url: `${this.ModelName}/${id}/${activity}`, params, cancelToken });
     getItemActivity = (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
