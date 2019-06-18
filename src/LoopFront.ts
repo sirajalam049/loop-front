@@ -292,7 +292,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         return response;
     }
 
-    requestDeleteItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken) => utils.request({ url: `${this.ModelName}/id/${activity}`, params, method: 'DELETE', cancelToken });
+    requestDeleteItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken) => utils.request({ url: `${this.ModelName}/${id}/${activity}`, params, method: 'DELETE', cancelToken });
     deleteItemActivity = (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.DELETING_ITEM_ACTIVITY = `DELETING_${this.ModelCaps}_${(activity || '').toUpperCase()}`;
         dispatch({ type: this.Actions.DELETING_ITEM_ACTIVITY, activity });
