@@ -36,6 +36,9 @@ export interface IActions {
     POSTING_ENTITY_OF_ITEM: string
     POST_ENTITY_OF_ITEM_SUCCESS: string
 
+    DELETING_SINGLE_ENTITY_OF_ITEM: string
+    SINGLE_ENTITY_BY_ITEM_DELETED: string
+
     DELETING_ENTITY_OF_ITEM: string
     ITEM_ENTITY_DELETED: string
 
@@ -138,6 +141,9 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
 
             POSTING_ENTITY_OF_ITEM: `POSTING_ENTITY_OF_${this.ModelCaps}`,
             POST_ENTITY_OF_ITEM_SUCCESS: `POST_ENTITY_OF_${this.ModelCaps}_SUCCESS`,
+
+            DELETING_SINGLE_ENTITY_OF_ITEM: `DELETING_SINGLE_ENTITY_OF_${this.ModelCaps}`,
+            SINGLE_ENTITY_BY_ITEM_DELETED: `SINGLE_ENTITY_OF_${this.ModelCaps}_DELETED`,
 
             DELETING_ENTITY_OF_ITEM: `DELETING_ENTITY_OF_${this.ModelCaps}`,
             ITEM_ENTITY_DELETED: `${this.ModelCaps}_ENTITY_DELETED`,
@@ -260,6 +266,16 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         this.Actions.POST_ENTITY_OF_ITEM_SUCCESS = `POST_${(entity || '').toUpperCase()}_OF_${this.ModelCaps}_SUCCESS`
         dispatch({ type: this.Actions.POST_ENTITY_OF_ITEM_SUCCESS, data: response.data, entity, additionalDispatchData });
         return response;
+    }
+
+    requestDeleteSingleEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], entityId: string | number, params: object = {}, cancelToken?: CancelToken) => utils.request({ url: `${this.ModelName}/${id}/${entity}/${entityId}`, method: 'DELETE', params, cancelToken });
+    deleteSingleEntityByItem = (id: string | number, entity: TEntities[keyof TEntities], entityId: string | number, params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
+        this.Actions.DELETING_SINGLE_ENTITY_OF_ITEM = `DELETING_SINGLE_${(entity || '').toUpperCase()}_OF_${this.ModelCaps}`;
+        dispatch({ type: this.Actions.DELETING_SINGLE_ENTITY_OF_ITEM, entity });
+        const response = await this.requestDeleteSingleEntityByItem(id, entity, entityId, params, cancelToken).catch(utils.throwError);
+        this.Actions.SINGLE_ENTITY_BY_ITEM_DELETED = `SINGLE_${(entity)}_OF_${this.ModelCaps}_DELETED`;
+        dispatch({ type: this.Actions.SINGLE_ENTITY_BY_ITEM_DELETED, data: response.data, entity, additionalDispatchData });
+        return response
     }
 
     requestDeleteEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], params: object = {}, cancelToken?: CancelToken, ) => utils.request({ url: `${this.ModelName}/${id}/${entity}`, method: 'DELETE', params, cancelToken });
