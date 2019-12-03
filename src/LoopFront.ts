@@ -4,7 +4,6 @@ import { Method, CancelToken, AxiosRequestConfig, Cancel } from 'axios';
 
 export type TStringObject = { [x: string]: string }
 
-
 // These are the default actions that can be dispatched
 export interface IActions {
 
@@ -194,7 +193,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
 
 
     // GET All items of the model
-    requestGetItemsList = async (params: object = {}, cancelToken?: CancelToken) => utils.request({ url: this.ModelName, params, cancelToken });
+    requestGetItemsList = async (params: object = {}, cancelToken?: CancelToken) => LoopFront.request({ url: this.ModelName, params, cancelToken });
     getItemsList = (params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         dispatch({ type: this.Actions.FETCHING_LIST });
         const response = await this.requestGetItemsList(params, cancelToken).catch(utils.throwError);
@@ -203,7 +202,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     }
 
     // GET single instance of the model
-    requestGetItem = async (id: string | number, params: object = {}, cancelToken?: CancelToken) => utils.request({ url: `/${this.ModelName}/${id}`, params, cancelToken });
+    requestGetItem = async (id: string | number, params: object = {}, cancelToken?: CancelToken) => LoopFront.request({ url: `/${this.ModelName}/${id}`, params, cancelToken });
     getItem = (id: string | number, params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         dispatch({ type: this.Actions.FETCHING_SINGLE_ITEM });
         const response = await this.requestGetItem(id, params, cancelToken).catch(utils.throwError);
@@ -212,7 +211,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     }
 
     // create a new instance
-    requestPostItem = async (data: object = {}, params: object = {}, cancelToken?: CancelToken) => utils.request({ url: this.ModelName, method: 'POST', data, params, cancelToken });
+    requestPostItem = async (data: object = {}, params: object = {}, cancelToken?: CancelToken) => LoopFront.request({ url: this.ModelName, method: 'POST', data, params, cancelToken });
     postItem = (data: object = {}, params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         dispatch({ type: this.Actions.POSTING_ITEM });
         const response = await this.requestPostItem(data, params, cancelToken).catch(utils.throwError);
@@ -221,7 +220,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     }
 
     // replace existing instance of the model or inserting a new one
-    requestPutItem = async (data: object = {}, params: object = {}, cancelToken?: CancelToken, ) => utils.request({ url: this.ModelName, method: 'PUT', data, params, cancelToken });
+    requestPutItem = async (data: object = {}, params: object = {}, cancelToken?: CancelToken, ) => LoopFront.request({ url: this.ModelName, method: 'PUT', data, params, cancelToken });
     putItem = (data: object = {}, params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         dispatch({ type: this.Actions.PUTTING_ITEM });
         const response = await this.requestPutItem(data, params, cancelToken).catch(utils.throwError);
@@ -230,7 +229,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     }
 
     // Update the existing instance of the model
-    requestPatchItem = (id: string | number, data: object, params: object = {}, cancelToken?: CancelToken, ) => utils.request({ url: `${this.ModelName}/${id}`, method: 'PATCH', data, params, cancelToken });
+    requestPatchItem = (id: string | number, data: object, params: object = {}, cancelToken?: CancelToken, ) => LoopFront.request({ url: `${this.ModelName}/${id}`, method: 'PATCH', data, params, cancelToken });
     patchItem = (id: string | number, data: object, params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         dispatch({ type: this.Actions.PATCHING_ITEM });
         const response = await this.requestPatchItem(id, data, params, cancelToken).catch(utils.throwError);
@@ -239,7 +238,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     }
 
     // Delete an instance of the model
-    requestDeleteItem = async (id: string | number, params: object = {}, cancelToken?: CancelToken, ) => utils.request({ url: `${this.ModelName}/${id}`, method: 'DELETE', params, cancelToken });
+    requestDeleteItem = async (id: string | number, params: object = {}, cancelToken?: CancelToken, ) => LoopFront.request({ url: `${this.ModelName}/${id}`, method: 'DELETE', params, cancelToken });
     deleteItem = (id: string | number, params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         dispatch({ type: this.Actions.DELETING_ITEM });
         const response = await this.requestDeleteItem(id, params, cancelToken).catch(utils.throwError);
@@ -248,7 +247,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     }
 
 
-    requestGetEntityByItem = async (id: number | string, entity: TEntities[keyof TEntities], params: object = {}, cancelToken?: CancelToken, ) => utils.request({ url: `${this.ModelName}/${id}/${entity}`, params, cancelToken });
+    requestGetEntityByItem = async (id: number | string, entity: TEntities[keyof TEntities], params: object = {}, cancelToken?: CancelToken, ) => LoopFront.request({ url: `${this.ModelName}/${id}/${entity}`, params, cancelToken });
     getEntityByItem = (id: string | number, entity: TEntities[keyof TEntities], params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.FETCHING_ENTITY_OF_ITEM = `FETCHING_${(entity || '' as string).toUpperCase()}_OF_SINGLE_${this.ModelCaps}`;
         dispatch({ type: this.Actions.FETCHING_ENTITY_OF_ITEM, entity });
@@ -258,7 +257,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         return response;
     }
 
-    requestPostEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], data: object = {}, params: object = {}, cancelToken?: CancelToken, ) => utils.request({ url: `${this.ModelName}/${id}/${entity}`, data, method: 'POST', params, cancelToken });
+    requestPostEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], data: object = {}, params: object = {}, cancelToken?: CancelToken, ) => LoopFront.request({ url: `${this.ModelName}/${id}/${entity}`, data, method: 'POST', params, cancelToken });
     postEntityByItem = (id: string | number, entity: TEntities[keyof TEntities], data: object = {}, params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.POSTING_ENTITY_OF_ITEM = `POSTING_${(entity || '').toUpperCase()}_OF_${this.ModelCaps}`;
         dispatch({ type: this.Actions.POSTING_ENTITY_OF_ITEM, entity });
@@ -268,7 +267,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         return response;
     }
 
-    requestDeleteSingleEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], entityId: string | number, params: object = {}, cancelToken?: CancelToken) => utils.request({ url: `${this.ModelName}/${id}/${entity}/${entityId}`, method: 'DELETE', params, cancelToken });
+    requestDeleteSingleEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], entityId: string | number, params: object = {}, cancelToken?: CancelToken) => LoopFront.request({ url: `${this.ModelName}/${id}/${entity}/${entityId}`, method: 'DELETE', params, cancelToken });
     deleteSingleEntityByItem = (id: string | number, entity: TEntities[keyof TEntities], entityId: string | number, params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.DELETING_SINGLE_ENTITY_OF_ITEM = `DELETING_SINGLE_${(entity || '').toUpperCase()}_OF_${this.ModelCaps}`;
         dispatch({ type: this.Actions.DELETING_SINGLE_ENTITY_OF_ITEM, entity });
@@ -278,7 +277,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         return response
     }
 
-    requestDeleteEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], params: object = {}, cancelToken?: CancelToken, ) => utils.request({ url: `${this.ModelName}/${id}/${entity}`, method: 'DELETE', params, cancelToken });
+    requestDeleteEntityByItem = async (id: string | number, entity: TEntities[keyof TEntities], params: object = {}, cancelToken?: CancelToken, ) => LoopFront.request({ url: `${this.ModelName}/${id}/${entity}`, method: 'DELETE', params, cancelToken });
     deleteEntityByItem = (id: string | number, entity: TEntities[keyof TEntities], params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.DELETING_ENTITY_OF_ITEM = `DELETING_${(entity || '').toUpperCase()}_OF_${this.ModelCaps}`;
         dispatch({ type: this.Actions.DELETING_ENTITY_OF_ITEM, entity });
@@ -288,7 +287,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         return response;
     }
 
-    requestGetActivity = async (activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken, ) => utils.request({ url: `${this.ModelName}/${activity}`, params, cancelToken });
+    requestGetActivity = async (activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken, ) => LoopFront.request({ url: `${this.ModelName}/${activity}`, params, cancelToken });
     getActivity = (activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.FETCHING_ACTIVITY = `FETCHING_${this.ModelCaps}_${(activity || '').toUpperCase()}`;
         dispatch({ type: this.Actions.FETCHING_ACTIVITY, activity });
@@ -298,7 +297,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         return response;
     }
 
-    requestPostActivity = async (activity: TActivities[keyof TActivities], data: object = {}, params: object = {}, cancelToken?: CancelToken, ) => utils.request({ url: `${this.ModelName}/${activity}`, data, method: 'POST', params, cancelToken });
+    requestPostActivity = async (activity: TActivities[keyof TActivities], data: object = {}, params: object = {}, cancelToken?: CancelToken, ) => LoopFront.request({ url: `${this.ModelName}/${activity}`, data, method: 'POST', params, cancelToken });
     postActivity = (activity: TActivities[keyof TActivities], data: object = {}, params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.POSTING_ACTIVITY = `POSTING_${this.ModelCaps}_${(activity || '').toUpperCase()}`;
         dispatch({ type: this.Actions.POSTING_ACTIVITY, activity });
@@ -308,7 +307,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         return response;
     }
 
-    requestDeleteItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken) => utils.request({ url: `${this.ModelName}/${id}/${activity}`, params, method: 'DELETE', cancelToken });
+    requestDeleteItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken) => LoopFront.request({ url: `${this.ModelName}/${id}/${activity}`, params, method: 'DELETE', cancelToken });
     deleteItemActivity = (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.DELETING_ITEM_ACTIVITY = `DELETING_${this.ModelCaps}_${(activity || '').toUpperCase()}`;
         dispatch({ type: this.Actions.DELETING_ITEM_ACTIVITY, activity });
@@ -319,7 +318,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
     }
 
 
-    requestGetItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken, ) => utils.request({ url: `${this.ModelName}/${id}/${activity}`, params, cancelToken });
+    requestGetItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken, ) => LoopFront.request({ url: `${this.ModelName}/${id}/${activity}`, params, cancelToken });
     getItemActivity = (id: string | number, activity: TActivities[keyof TActivities], params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.FETCHING_ITEM_ACTIVITY = `FETCHING_${this.ModelCaps}_ITEM_${(activity || '').toUpperCase()}`;
         dispatch({ type: this.Actions.FETCHING_ITEM_ACTIVITY, activity });
@@ -329,7 +328,7 @@ class LoopFront<TCustomActions extends TStringObject = {}, TEntities extends TSt
         return response;
     }
 
-    requestPostItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], data: object = {}, params: object = {}, cancelToken?: CancelToken, ) => utils.request({ url: `${this.ModelName}/${id}/${activity}`, method: 'POST', data, params, cancelToken });
+    requestPostItemActivity = async (id: string | number, activity: TActivities[keyof TActivities], data: object = {}, params: object = {}, cancelToken?: CancelToken, ) => LoopFront.request({ url: `${this.ModelName}/${id}/${activity}`, method: 'POST', data, params, cancelToken });
     postItemActivity = (id: string | number, activity: TActivities[keyof TActivities], data: object = {}, params: object = {}, cancelToken?: CancelToken, additionalDispatchData: object = {}) => async (dispatch: Dispatch<any>) => {
         this.Actions.POSTING_ITEM_ACTIVITY = `$POSTING_${this.ModelCaps}_ITEM_${(activity || '').toUpperCase()}`;
         dispatch({ type: this.Actions.POSTING_ITEM_ACTIVITY, activity });

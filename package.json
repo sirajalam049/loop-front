@@ -1,6 +1,6 @@
 {
     "name": "loop-front",
-    "version": "0.0.41",
+    "version": "0.0.42",
     "description": "LoopFront manages the api requests for CRUD, relations and remote methods at front end and make it easy to dispatch redux actions.",
     "main": "./dist/index.js",
     "_location": "/loop-front",

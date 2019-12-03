@@ -1,14 +1,13 @@
-import LoopFront, { TRequestConfig } from "../LoopFront";
-import axios, { AxiosPromise } from 'axios'
+import axios, { AxiosPromise, AxiosRequestConfig } from 'axios'
 
 // Just a wrapper on axios, in case some other library is used in place of axios
 const utils = {
 
-    request: <T = {}>(config: TRequestConfig): AxiosPromise => {
+    request: <T = {}>(config: AxiosRequestConfig, log = true): AxiosPromise => {
         if (!axios.defaults.baseURL) {
             throw new Error('Error: Loopfront Base Url is not provided');
         }
-        if (LoopFront.Logger) {
+        if (log) {
             console.log("%c Request => ", "font-size: 12px; color: rgb(0, 204, 102); font-weight: bold", `${axios.defaults.baseURL}/${config.url}`);
             console.log("%c Config  => ", "font-size: 12px; color: rgb(51, 102, 255); font-weight: bold", config);
         }
