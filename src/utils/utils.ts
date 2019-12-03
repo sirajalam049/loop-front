@@ -1,4 +1,4 @@
-import axios, { AxiosPromise, AxiosRequestConfig } from 'axios'
+import axios, { AxiosPromise, AxiosRequestConfig, AxiosError } from 'axios'
 
 // Just a wrapper on axios, in case some other library is used in place of axios
 const utils = {
@@ -20,7 +20,7 @@ const utils = {
 
     setAuthHeader: (access_token?: string) => axios.defaults.headers.common['Authorization'] = access_token,
 
-    throwError: (error: any) => { console.log('Error', error); throw error }
+    throwError: (error: AxiosError) => { console.log('Error', error.response); throw error }
 
 }
 
