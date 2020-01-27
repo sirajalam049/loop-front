@@ -165,8 +165,8 @@ class LoopFront<TCustomActions extends TStringany = {}, TEntities extends TStrin
             ITEM_ACTIVITY_DELETE_SUCCESS: `${this.ModelCaps}_ACTIVITY_DELETE_SUCCESS`,
 
             
-            PUTTING_ENTITY_OF_ITEM : `PUTTING_ENTITY_OF_${this.ModelCaps}`,
-            PUT_ENTITY_OF_ITEM_SUCCESS : `PUT_ENTITY_OF_${this.ModelCaps}_SUCCESS`,
+            PUTTING_ENTITY_OF_ITEM : `PUTTING_ENTITY_OF_SINGLE_${this.ModelCaps}`,
+            PUT_ENTITY_OF_ITEM_SUCCESS : `PUT_ENTITY_OF_SINGLE_${this.ModelCaps}_SUCCESS`,
             // Override the values of pre-defined actions for a particular any or adding new actions
             ...(customActions || {} as TCustomActions)
         }
@@ -344,10 +344,10 @@ class LoopFront<TCustomActions extends TStringany = {}, TEntities extends TStrin
 
     requestPutEntityByItem = async (id: string , entity : TEntities[keyof TEntities] , data?: any  , params?:any ) => LoopFront.request({url: `${this.ModelName}/${id}/${entity}`,method: 'PUT' , data , params })
     putEntityByItem = (id: string , entity : TEntities[keyof TEntities],data?:any , params?:any , additionalDispatchData?:any) => async (dispatch: Dispatch<any>) => {
-        this.Actions.PUTTING_ENTITY_OF_ITEM = `$PUTTING_${(entity || '').toUpperCase}_OF_ITEM_${this.ModelCaps}`;
+        this.Actions.PUTTING_ENTITY_OF_ITEM = `$PUTTING_${(entity || '').toUpperCase}_OF_SINGLE_ITEM_${this.ModelCaps}`;
         dispatch({type: this.Actions.PUTTING_ENTITY_OF_ITEM , entity});
         const response = await this.requestPutEntityByItem(id,entity,data,params).catch(utils.throwError);
-        this.Actions.PUT_ENTITY_OF_ITEM_SUCCESS = `PUT_${this.ModelCaps}_OF_ITEM_SUCCESS`;
+        this.Actions.PUT_ENTITY_OF_ITEM_SUCCESS = `PUT_${this.ModelCaps}_OF_SINGLE_ITEM_SUCCESS`;
         dispatch({type : this.Actions.PUT_ENTITY_OF_ITEM_SUCCESS , data: response.data , entity , additionalDispatchData})
     }
 } 
