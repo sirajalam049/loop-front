@@ -2,14 +2,17 @@ import { Dispatch } from 'redux';
 import utils from './utils';
 import { Method, CancelToken, AxiosRequestConfig, Cancel } from 'axios';
 
-export type TStringany = { [x: string]: string }
+export type TStringAny = { [x: string]: string }
 
 // These are the default actions that can be dispatched
 export interface IActions {
 
     // For main list get request
     FETCHING_LIST: string
-    LIST_RECEIVED: string
+    LIST_RECEIVED: string;
+
+    DELETING_LIST: string;
+    DELETE_LIST_SUCCESS: string;
 
     // To get the single instance of the model
     FETCHING_SINGLE_ITEM: string
@@ -63,9 +66,11 @@ export interface IActions {
     PUTTING_ACTIVITY_OF_SINGLE_ITEM: string;
 
 
+
+
 }
 
-export const DefaultActivites = {
+export const DefaultActivities = {
     COUNT: 'count',
     EXISTS: 'exists',
     REPLACE: 'replace',
@@ -107,7 +112,7 @@ export interface TAction {
     additionalDispatchData?: any
 }
 
-class LoopFront<TCustomActions extends TStringany = {}, TEntities extends TStringany = {}, TActivities extends TStringany = {}> {
+class LoopFront<TCustomActions extends TStringAny = {}, TEntities extends TStringAny = {}, TActivities extends TStringAny = {}> {
 
     static Logger: boolean;
 
@@ -175,12 +180,15 @@ class LoopFront<TCustomActions extends TStringany = {}, TEntities extends TStrin
             PUT_ACTIVITY_OF_SINGLE_ITEM_SUCCESS: `PUT_ACTIVITY_OF_SINGLE_${this.ModelCaps}_SUCCESS`,
             PUTTING_ACTIVITY_OF_SINGLE_ITEM: `PUTTING_ACTIVITY_ON_SINGLE_${this.ModelCaps}`,
 
+            DELETING_LIST: 'DELETING_LIST',
+            DELETE_LIST_SUCCESS: 'DELETE_LIST_SUCCESS',
+
             ...(customActions || {} as TCustomActions)
         }
 
         this.Entities = { ...(entities) };
 
-        this.Activites = { ...DefaultActivites, ...(activities || {} as TActivities) }
+        this.Activities = { ...DefaultActivities, ...(activities || {} as TActivities) }
 
     }
 
@@ -188,7 +196,7 @@ class LoopFront<TCustomActions extends TStringany = {}, TEntities extends TStrin
     readonly ModelCaps: string;
     public Actions: IActions & (TCustomActions)
     public Entities: TEntities
-    public Activites: typeof DefaultActivites & TActivities
+    public Activities: typeof DefaultActivities & TActivities
 
     // It will set the baseApiUrl for every API request.
     public static init(baseUrl: string, config: { log: boolean } = { log: false }) {
@@ -206,9 +214,22 @@ class LoopFront<TCustomActions extends TStringany = {}, TEntities extends TStrin
     // GET All items of the model
     requestGetItemsList = async (params: any = {}, cancelToken?: CancelToken) => LoopFront.request({ url: this.ModelName, params, cancelToken });
     getItemsList = (params: any = {}, cancelToken?: CancelToken, additionalDispatchData: any = {}) => async (dispatch: Dispatch<any>) => {
+        this.Actions.FETCHING_LIST = `FETCHING_${this.ModelCaps}_LIST`;
+        this.Actions.LIST_RECEIVED = `${this.ModelCaps}_LIST_RECEIVED`;
         dispatch({ type: this.Actions.FETCHING_LIST });
         const response = await this.requestGetItemsList(params, cancelToken).catch(utils.throwError);
         dispatch({ type: this.Actions.LIST_RECEIVED, data: response.data, additionalDispatchData });
+        return response;
+    }
+
+    // DELETE Items list
+    requestDeleteItemsList = async (params: any = {}, data: any = {}) => LoopFront.request({ url: this.ModelName, params, data, method: 'DELETE' });
+    deleteItemsList = (params: any = {}, data: any = {}, additionalDispatchData: any = {}) => async (dispatch: Dispatch<any>) => {
+        this.Actions.DELETING_LIST = `DELETING_${this.ModelCaps}_LIST`;
+        this.Actions.DELETE_LIST_SUCCESS = `${this.ModelCaps}_LIST_DELETE_SUCCESS`;
+        dispatch({ type: this.Actions.DELETING_LIST });
+        const response = await this.requestDeleteItemsList(params, data).catch(utils.throwError);
+        dispatch({ type: this.Actions.DELETE_LIST_SUCCESS, data: response.data, additionalDispatchData });
         return response;
     }
 
@@ -221,7 +242,7 @@ class LoopFront<TCustomActions extends TStringany = {}, TEntities extends TStrin
         return response;
     }
 
-    // create a new instance
+    // CREATE a new instance
     requestPostItem = async (data: any = {}, params: any = {}, cancelToken?: CancelToken) => LoopFront.request({ url: this.ModelName, method: 'POST', data, params, cancelToken });
     postItem = (data: any = {}, params: any = {}, cancelToken?: CancelToken, additionalDispatchData: any = {}) => async (dispatch: Dispatch<any>) => {
         dispatch({ type: this.Actions.POSTING_ITEM });
