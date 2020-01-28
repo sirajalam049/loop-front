@@ -344,12 +344,12 @@ class LoopFront<TCustomActions extends TStringany = {}, TEntities extends TStrin
     }
     
     requestPutActivity = async (activity: TActivities[keyof TActivities] , data?:any , params?:any) => LoopFront.request({url: `${this.ModelName}/${activity}` , method : 'PUT' , data, params})
-    putActivity = (activity: TActivities[keyof TActivities] , data?:any , params?:any) => async (dispatch : Dispatch<any>) => {
+    putActivity = (activity: TActivities[keyof TActivities] , data?:any , params?:any ,additionalDispatchData?:any) => async (dispatch : Dispatch<any>) => {
         this.Actions.PUTTING_ACTIVITY = `PUTTING_${activity}_ON_${this.ModelCaps}`
         dispatch({type : this.Actions.PUTTING_ACTIVITY ,data:data})
         const response = await this.requestPutActivity(activity,data,params);
         this.Actions.PUT_ACTIVITY_SUCCESS = `PUT_${activity}_SUCCESS_ON_${this.ModelCaps}`
-        dispatch({type:this.Actions.PUT_ACTIVITY_SUCCESS , data:response.data , additionalDispatchData:{}})
+        dispatch({type:this.Actions.PUT_ACTIVITY_SUCCESS , data:response.data , additionalDispatchData:additionalDispatchData})
     }
 } 
 
