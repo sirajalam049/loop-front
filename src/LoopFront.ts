@@ -342,24 +342,6 @@ class LoopFront<TCustomActions extends TStringany = {}, TEntities extends TStrin
         dispatch({ type: this.Actions.ITEM_ACTIVITY_POST_SUCCESS, data: response.data, activity, additionalDispatchData });
         return response;
     }
-
-    //requestPutEntityByItem = async (id: string , entity : TEntities[keyof TEntities] , data?: any  , params?:any ) => LoopFront.request({url: `${this.ModelName}/${id}/${entity}`,method: 'PUT' , data , params })
-    // putEntityByItem = (id: string , entity : TEntities[keyof TEntities],data?:any , params?:any , additionalDispatchData?:any) => async (dispatch: Dispatch<any>) => {
-    //     this.Actions.PUTTING_ENTITY_OF_ITEM = `$PUTTING_${(entity || '').toUpperCase}_OF_SINGLE_${this.ModelCaps}`;
-    //     dispatch({type: this.Actions.PUTTING_ENTITY_OF_ITEM , entity});
-    //     const response = await this.requestPutEntityByItem(id,entity,data,params).catch(utils.throwError);
-    //     this.Actions.PUT_ENTITY_OF_ITEM_SUCCESS = `PUT_${(entity || '').toUpperCase}_OF_SINGLE_${this.ModelCaps}_SUCCESS`;
-    //     dispatch({type : this.Actions.PUT_ENTITY_OF_ITEM_SUCCESS , data: response.data , entity , additionalDispatchData})
-    // }  
-    
-    // requestPutRelation = (data:any) => LoopFront.request({url: 'appModels/relations',data: data,method: 'PUT'})
-    // putEnititybyItem = (data?:any,item?:string,entity?:string) => async (dispatch: Dispatch<any>) => {
-    //     this.Actions.PUTTING_ENTITY_OF_ITEM = `$PUTTING_${(entity || '').toUpperCase}_OF_SINGLE_${(item || '').toUpperCase}`;
-    //     dispatch({type: this.Actions.PUTTING_ENTITY_OF_ITEM , data:data})
-    //     const response = await this.requestPutRelation(data)
-    //     this.Actions.PUT_ENTITY_OF_ITEM_SUCCESS = `PUT_${(entity || '').toUpperCase}_OF_SINGLE_${(item || '').toUpperCase}_SUCCESS`;
-    //     dispatch({type: this.Actions.PUTTING_ENTITY_OF_ITEM , data:response.data , additionalDispatchData:{item:item , entitiy:entity}} )
-    // }
     
     requestPutActivity = async (activity: TActivities[keyof TActivities] , data?:any , params?:any) => LoopFront.request({url: `${this.ModelName}/${activity}` , method : 'PUT' , data, params})
     putActivity = (activity: TActivities[keyof TActivities] , data?:any , params?:any) => async (dispatch : Dispatch<any>) => {
