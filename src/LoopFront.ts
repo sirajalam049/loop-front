@@ -59,9 +59,6 @@ export interface IActions {
     PUT_ENTITY_OF_ITEM_SUCCESS : string
     PUTTING_ENTITY_OF_ITEM : string
 
-    PUT_ACTIVITY_OF_ITEM_SUCCESS : string 
-    PUTTING_ACTIVITY_OF_ITEM : string
-
     
 }
 
@@ -173,8 +170,6 @@ class LoopFront<TCustomActions extends TStringany = {}, TEntities extends TStrin
             PUTTING_ENTITY_OF_ITEM : `PUTTING_ENTITY_OF_SINGLE_${this.ModelCaps}`,
             PUT_ENTITY_OF_ITEM_SUCCESS : `PUT_ENTITY_OF_SINGLE_${this.ModelCaps}_SUCCESS`,
 
-            PUT_ACTIVITY_OF_ITEM_SUCCESS :  ``, 
-            PUTTING_ACTIVITY_OF_ITEM : `string`,
             
             ...(customActions || {} as TCustomActions)
         }
