@@ -11,7 +11,7 @@ const utils = {
             console.log("%c Request => ", "font-size: 12px; color: rgb(0, 204, 102); font-weight: bold", `${axios.defaults.baseURL}/${config.url}`);
             console.log("%c Config  => ", "font-size: 12px; color: rgb(51, 102, 255); font-weight: bold", config);
             axios.interceptors.response.use(res => {
-                console.log("%c Request => ", "font-size: 12px; color: rgb(0, 204, 102); font-weight: bold", `${res.data}`);
+                console.log("%c Response => ", "font-size: 12px; color: rgb(0, 204, 102); font-weight: bold", res.data);
                 return res;
             })
         }
