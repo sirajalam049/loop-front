@@ -173,7 +173,7 @@ class LoopFront<TCustomActions extends TStringany = {}, TEntities extends TStrin
             PUTTING_ACTIVITY: `PUTTING_ACTIVITY_ON_${this.ModelCaps}`,
 
             PUT_ACTIVITY_OF_SINGLE_ITEM_SUCCESS: `PUT_ACTIVITY_OF_SINGLE_${this.ModelCaps}_SUCCESS`,
-            PUTTING_ACTIVITY_SINGLE_ITEM: `PUTTING_ACTIVITY_ON_SINGLE_${this.ModelCaps}`,
+            PUTTING_ACTIVITY_OF_SINGLE_ITEM: `PUTTING_ACTIVITY_ON_SINGLE_${this.ModelCaps}`,
 
             ...(customActions || {} as TCustomActions)
         }
