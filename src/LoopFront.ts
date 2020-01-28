@@ -56,8 +56,10 @@ export interface IActions {
     DELETING_ITEM_ACTIVITY: string
     ITEM_ACTIVITY_DELETE_SUCCESS: string
 
-    PUT_ENTITY_OF_ITEM_SUCCESS : string
-    PUTTING_ENTITY_OF_ITEM : string
+    PUT_ACTIVITY_SUCCESS : string 
+    PUTTING_ACTIVITY : string
+
+    
 }
 
 export const DefaultActivites = {
@@ -164,10 +166,9 @@ class LoopFront<TCustomActions extends TStringany = {}, TEntities extends TStrin
             DELETING_ITEM_ACTIVITY: `${this.ModelCaps}_DELETING_ITEM_ACTIVITY`,
             ITEM_ACTIVITY_DELETE_SUCCESS: `${this.ModelCaps}_ACTIVITY_DELETE_SUCCESS`,
 
+            PUT_ACTIVITY_SUCCESS : `PUT_ACTIVITY_SUCCESS_ON_${this.ModelCaps}`, 
+            PUTTING_ACTIVITY : `PUTTING_ACTIVITY_ON_${this.ModelCaps}`,
             
-            PUTTING_ENTITY_OF_ITEM : `PUTTING_ENTITY_OF_SINGLE_${this.ModelCaps}`,
-            PUT_ENTITY_OF_ITEM_SUCCESS : `PUT_ENTITY_OF_SINGLE_${this.ModelCaps}_SUCCESS`,
-            // Override the values of pre-defined actions for a particular any or adding new actions
             ...(customActions || {} as TCustomActions)
         }
 
@@ -341,14 +342,14 @@ class LoopFront<TCustomActions extends TStringany = {}, TEntities extends TStrin
         dispatch({ type: this.Actions.ITEM_ACTIVITY_POST_SUCCESS, data: response.data, activity, additionalDispatchData });
         return response;
     }
-
-    requestPutEntityByItem = async (id: string , entity : TEntities[keyof TEntities] , data?: any  , params?:any ) => LoopFront.request({url: `${this.ModelName}/${id}/${entity}`,method: 'PUT' , data , params })
-    putEntityByItem = (id: string , entity : TEntities[keyof TEntities],data?:any , params?:any , additionalDispatchData?:any) => async (dispatch: Dispatch<any>) => {
-        this.Actions.PUTTING_ENTITY_OF_ITEM = `$PUTTING_${(entity || '').toUpperCase}_OF_SINGLE_${this.ModelCaps}`;
-        dispatch({type: this.Actions.PUTTING_ENTITY_OF_ITEM , entity});
-        const response = await this.requestPutEntityByItem(id,entity,data,params).catch(utils.throwError);
-        this.Actions.PUT_ENTITY_OF_ITEM_SUCCESS = `PUT_${(entity || '').toUpperCase}_OF_SINGLE_${this.ModelCaps}_SUCCESS`;
-        dispatch({type : this.Actions.PUT_ENTITY_OF_ITEM_SUCCESS , data: response.data , entity , additionalDispatchData})
+    
+    requestPutActivity = async (activity: TActivities[keyof TActivities] , data?:any , params?:any) => LoopFront.request({url: `${this.ModelName}/${activity}` , method : 'PUT' , data, params})
+    putActivity = (activity: TActivities[keyof TActivities] , data?:any , params?:any ,additionalDispatchData?:any) => async (dispatch : Dispatch<any>) => {
+        this.Actions.PUTTING_ACTIVITY = `PUTTING_${activity}_ON_${this.ModelCaps}`
+        dispatch({type : this.Actions.PUTTING_ACTIVITY ,data:data})
+        const response = await this.requestPutActivity(activity,data,params);
+        this.Actions.PUT_ACTIVITY_SUCCESS = `PUT_${activity}_SUCCESS_ON_${this.ModelCaps}`
+        dispatch({type:this.Actions.PUT_ACTIVITY_SUCCESS , data:response.data , additionalDispatchData:additionalDispatchData})
     }
 } 
 
