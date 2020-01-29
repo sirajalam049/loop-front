@@ -373,19 +373,19 @@ class LoopFront<TCustomActions extends TStringAny = {}, TEntities extends TStrin
     requestPutActivity = async (activity: TActivities[keyof TActivities], data?: any, params?: any) => LoopFront.request({ url: `${this.ModelName}/${activity}`, method: 'PUT', data, params })
     putActivity = (activity: TActivities[keyof TActivities], data?: any, params?: any, additionalDispatchData?: any) => async (dispatch: Dispatch<any>) => {
         this.Actions.PUTTING_ACTIVITY = `PUTTING_${activity}_ON_${this.ModelCaps}`
-        dispatch({ type: this.Actions.PUTTING_ACTIVITY, data: data })
+        dispatch({ type: this.Actions.PUTTING_ACTIVITY, activity, additionalDispatchData })
         const response = await this.requestPutActivity(activity, data, params);
         this.Actions.PUT_ACTIVITY_SUCCESS = `PUT_${activity}_SUCCESS_ON_${this.ModelCaps}`
-        dispatch({ type: this.Actions.PUT_ACTIVITY_SUCCESS, data: response.data, additionalDispatchData })
+        dispatch({ type: this.Actions.PUT_ACTIVITY_SUCCESS, data: response.data, activity, additionalDispatchData });
     }
 
     requestPutActivityOfItem = async (id: string, activity: TActivities[keyof TActivities], data?: any, params?: any) => LoopFront.request({ url: `${this.ModelName}/${id}/${activity}`, method: 'PUT', data, params })
     putActivityOfItem = (id: string, activity: TActivities[keyof TActivities], data?: any, params?: any, additionalDispatchData?: any) => async (dispatch: Dispatch<any>) => {
         this.Actions.PUTTING_ACTIVITY_OF_SINGLE_ITEM = `PUTTING_${activity}_OF_SINGLE_${this.ModelCaps}`
-        dispatch({ type: this.Actions.PUTTING_ACTIVITY_OF_SINGLE_ITEM, data: data })
+        dispatch({ type: this.Actions.PUTTING_ACTIVITY_OF_SINGLE_ITEM, activity, additionalDispatchData })
         const response = await this.requestPutActivityOfItem(id, activity, data, params);
         this.Actions.PUT_ACTIVITY_OF_SINGLE_ITEM_SUCCESS = `PUT_${activity}_OF_SINGLE_${this.ModelCaps}_SUCCESS`
-        dispatch({ type: this.Actions.PUT_ACTIVITY_OF_SINGLE_ITEM_SUCCESS, data: response.data, additionalDispatchData })
+        dispatch({ type: this.Actions.PUT_ACTIVITY_OF_SINGLE_ITEM_SUCCESS, activity, data: response.data, additionalDispatchData });
     }
 
 }
