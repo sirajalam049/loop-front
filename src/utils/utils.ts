@@ -3,7 +3,7 @@ import LoopFront from '../LoopFront';
 
 const responseLogger = (res: AxiosResponse) => {
     if (LoopFront.Logger) {
-        console.log("%c Request => ", "font-size: 12px; color: rgb(0, 204, 102); font-weight: bold", `${res.config.baseURL}/${res.config.url}`);
+        console.log("%c Request => ", "font-size: 12px; color: rgb(0, 204, 102); font-weight: bold", `${res.config.url}`);
         console.log("%c Config  => ", "font-size: 12px; color: rgb(51, 102, 255); font-weight: bold", res.config);
         console.log("%c Response => ", "font-size: 12px; color: rgb(0, 204, 102); font-weight: bold", res.data);
     }
